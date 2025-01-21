@@ -3,6 +3,7 @@
 Use Case: Deploy AWS CloudFormation Stack
 
 **Step 1: Repository Structure**
+
 The GitHub repository should have the following structure:
 
 ![image](https://github.com/user-attachments/assets/149ea72f-1694-4c54-a1c3-dae5b2eb3ea9)
