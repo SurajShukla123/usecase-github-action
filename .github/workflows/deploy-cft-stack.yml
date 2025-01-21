@@ -1,0 +1,42 @@
+name: Deploy AWS CFT Stack
+
+on:
+  push:
+    branches:
+      - main # Automatically run the workflow on pushes to the 'main' branch
+  workflow_dispatch: # Enable manual triggering
+    inputs:
+      aws_region:
+        description: "AWS Region to deploy"
+        required: true
+        default: "us-east-1"
+      stack_name:
+        description: "Name of the CloudFormation stack"
+        required: true
+        default: "my-test-stack"
+      template_file:
+        description: "Path to the CloudFormation template file"
+        required: true
+        default: "templates/example-template.yaml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Deploy CloudFormation Stack
+        run: |
+          aws cloudformation deploy \
+            --template-file ${{ inputs.template_file }} \
+            --stack-name ${{ inputs.stack_name }} \
+            --capabilities CAPABILITY_NAMED_IAM
